@@ -46,6 +46,7 @@ export default {
     },
     methods: {
         ...mapActions("movies", ["removeMovie"]),
+        ...mapActions(["showNotify"]),
         onMouseOver(poster) {
             this.$emit("changePoster", poster);
         },
@@ -53,6 +54,11 @@ export default {
             const isConfirmed = await this.$bvModal.msgBoxConfirm(`Are you sure delete ${title}?`);
             if (isConfirmed) {
                 this.removeMovie(id);
+                this.showNotify({
+                    msg: "Movie deleted successful",
+                    variant: "success",
+                    title: "Success",
+                });
             }
         },
     },
