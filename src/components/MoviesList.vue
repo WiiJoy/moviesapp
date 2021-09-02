@@ -9,6 +9,7 @@
                         :movie="movie"
                         @mouseover.native="onMouseOver(movie.Poster)"
                         @removeItem="onRemoveItem"
+                        @showModal="onShowMovieInfo"
                     />
                 </BCol>
             </template>
@@ -16,6 +17,15 @@
                 <div>Empty list</div>
             </template>
            </BRow>
+           <BModal
+            class="movie-modal-body"
+            :id="movieInfoModalID"
+            size="xl"
+            hide-footer
+            hide-header
+           >
+               <MovieInfoModalContent :movie="selectedMovie" @closeModal="onCloseModal" />
+           </BModal>
        </BContainer>
    </div> 
 </template>
@@ -23,6 +33,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import MovieItem from "./MovieItem.vue";
+import MovieInfoModalContent from "./MovieInfoModalContent";
 
 export default {
     name: "MoviesList",
@@ -32,8 +43,13 @@ export default {
             default: () => ({}),
         },
     },
+    data: () => ({
+        movieInfoModalID: "movie-info",
+        selectedMovieID: "",
+    }),
     components: {
         MovieItem,
+        MovieInfoModalContent,
     },
     computed: {
         ...mapGetters("movies", ["isSearch"]),
@@ -42,6 +58,9 @@ export default {
         },
         listTitle() {
             return this.isSearch ? "Search result" : "IMDB Top 250";
+        },
+        selectedMovie() {
+            return this.selectedMovieID ? this.list[this.selectedMovieID] : null;
         },
     },
     methods: {
@@ -61,6 +80,14 @@ export default {
                 });
             }
         },
+        onShowMovieInfo(id) {
+            this.selectedMovieID = id;
+            this.$bvModal.show(this.movieInfoModalID);
+        },
+        onCloseModal() {
+            this.selectedMovieID = null;
+            this.$bvModal.hide(this.movieInfoModalID);
+        },
     },
 }
 </script>
@@ -70,5 +97,11 @@ export default {
     font-size: 50px;
     margin-bottom: 30px;
     color: #fff;
+}
+</style>
+
+<style>
+.movie-modal-body {
+    padding: 0 !important;
 }
 </style>
