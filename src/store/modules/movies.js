@@ -44,12 +44,12 @@ const moviesStore = {
         },
     },
     actions: {
-        initMoviesStore: {
-            handler({ dispatch }) {
-                dispatch("fetchMovies");
-            },
-            root: true,
-        },
+        // initMoviesStore: {
+        //     handler({ dispatch }) {
+        //         dispatch("fetchMovies");
+        //     },
+        //     root: true,
+        // },
 
         async fetchMovies({ getters, commit, dispatch }) {
             try {
